@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
+
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
+
+require "eventmachine"
+require "yaml"
+
+require 'rubygems'
+require 'bundler/setup'
+
+require "register"
+
+unless ARGV.size == 1
+  abort "Usage: dea <config path>"
+end
+
+begin
+  config = YAML.load_file(ARGV[0])
+rescue => e
+  abort "ERROR: Failed loading config: #{e}"
+end
+
+
+broker = Register::Broker.new(config)
+
+EM.epoll
+
+EM.run do
+  broker.setup
+  broker.start
+end  
