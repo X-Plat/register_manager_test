@@ -2,6 +2,10 @@
 # NATS message bus URI
 mbus: nats://127.0.0.1:4222
 
+logging:
+  level: debug
+  file: /tmp/register/register.log
+
 rpc:
   bridge: http://127.0.0.1:8088  #bridge address
   register_retry_delay: 2         #delay to register instance again.

@@ -8,34 +8,17 @@ module Register
       File.directory?(UNIT_TESTS_DIR).should be_true
       @bridge_client = make_bridge_agent
     end
+ 
     after :each do
       FileUtils.rm_rf(UNIT_TESTS_DIR)
       File.directory?(UNIT_TESTS_DIR).should be_false
     end
 
-    it "should return the standard register uri" do
-      @bridge_client.register_instance_uri.should == "#{@bridge_client.instance_variable_get(:@bridge)}/addRMIports"
+    it "should return the instance id" do
+      @bridge_client.bridge_instance_id(rpc_instance).should == \
+        "#{rpc_instance['app_id']}_#{rpc_instance['instance_index']}"
     end
 
-    it "should get teh application name and 0-0-0-0 if not standard name" do
-      app_name = "appwithoutversion"
-      @bridge_client.parse_app_version(app_name).should == ["appwithoutversion", "0-0-0-0"]
-    end
-
-    it "should get teh application name and version if standard name" do
-      app_name = "app_1-0-0-0"
-      @bridge_client.parse_app_version(app_name).should == ["app", "1-0-0-0"]
-    end    
-    
-    it "should parse the application group and version" do
-      @bridge_client.unregister_instance_uri.should == "#{@bridge_client.instance_variable_get(:@bridge)}/delRMIports"
-    end
-
-    it "should convert the rpc ports group to string" do
-      @bridge_client.parse_bns_ports(rpc_ports).should == rpc_port_in_str
-    end
-
-    
     def make_bridge_agent(overide = {})
       config = {
         'logging' => { :file =>  File.join(UNIT_TESTS_DIR, 'register.log') },
@@ -51,6 +34,28 @@ module Register
       VCAP::Logging.setup_from_config(config['logging'])
       logger = VCAP::Logging.logger('broker')
       Register::BridgeClient.new(config, logger)
+    end
+
+    def rpc_instance
+      {
+        'app_uri' => "test.baidu.com", 
+        'app_id' => "1", 
+        'app_name' => "test", 
+        'instance_index' => "0", 
+        'instance_id' => "cfab68ad72a1621079ff39b3b17884ed", 
+        'instance_ip' => "127.0.0.1", 
+        'instance_http_port' => 10041, 
+        'instance_meta' => {
+           'prod_ports' => {
+              'server'  => {
+                 'host_port' => 10041,
+                 'port_info' => {
+                    'bns' => true
+                  }
+               }
+            }
+        }
+      }
     end
 
     def rpc_ports
