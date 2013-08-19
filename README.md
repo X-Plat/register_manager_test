@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/x-plat/register_manager.png)](https://travis-ci.org/x-plat/register_manager)
+[![Build Status](https://travis-ci.org/X-Plat/register_manager.png)](https://travis-ci.org/X-Plat/register_manager)
 
 # register_manager
 
