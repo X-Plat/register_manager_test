@@ -3,7 +3,7 @@
 # register_manager
 
 This repository contains the source code for a register manager
-for X-Plat.
+for x-plat.
 
 ## Summary
 
