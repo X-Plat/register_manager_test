@@ -43,10 +43,12 @@ module Register
  
       NATS.start(:uri => @nats_uri) do
 	NATS.subscribe('broker.register', :queue => :bk) { |msg| 
+          logger.info("[RPC] Received broker.register message.")
           instance = Yajl::Parser.parse(msg)
           bridge_client.request( instance, { :action => 'register'} )
         }
         NATS.subscribe('broker.unregister',:queue => :bk) { |msg| 
+          logger.info("[RPC] Received broker.unregister message.")
           instance = Yajl::Parser.parse(msg)
           bridge_client.request( instance, { :action => 'unregister'} )
         }

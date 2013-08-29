@@ -108,7 +108,9 @@ module Register
                            request data is #{payload}")
              @waiting_bridge_queue.delete(bid)
              callback.call('succ') if callback
-
+          elsif resp && INSTANCE_NOT_REGISTER.match(resp["data"])
+             @logger.warn("[RPC] Skipping instance not registered!")
+             callback.call('succ') if callback
           elsif retries < DEFAULT_BRIDGE_RETRY_TIMES
              EM.add_timer(@register_retry_delay) {
                request_with_retry(request_api, method, payload, options, retries += 1, &callback)

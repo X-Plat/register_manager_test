@@ -8,5 +8,5 @@ module Register
     DEFAULT_APP_USER = 'app@baidu.com'
     DEFAULT_APP_PATH = 'N/A'
     SUPPORTED_BRIDGE_ACTION = ['register', 'unregister']
-   
+    INSTANCE_NOT_REGISTER = /info:app.*is null/
 end
