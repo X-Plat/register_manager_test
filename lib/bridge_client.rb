@@ -132,7 +132,7 @@ module Register
       http.errback {
         if retries < DEFAULT_BRIDGE_RETRY_TIMES
            EM.add_timer(@register_retry_delay) {
-             request(request_api, method, payload, options, retries += 1, &callback)
+             request_with_retry(request_api, method, payload, options, retries += 1, &callback)
            }
         else
            @logger.warn("[RPC] Register instance with bridge failed with error\
