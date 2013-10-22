@@ -4,7 +4,7 @@ mbus: nats://cloudfoundry_php:cloudfoundry_php@10.36.59.34:4343
 
 logging:
   level: debug
-  file: /home/work/register_manager/log/register.log
+  file: /tmp/register_manager/log/register.log
 
 rpc:
   bridge: http://127.0.0.1:8310  #bridge address
