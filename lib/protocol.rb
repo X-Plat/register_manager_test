@@ -22,6 +22,14 @@ module Register
       def unregister_api
         "/delRMIports"
       end
+
+      def create_api
+        "/addServiceName"
+      end
+ 
+      def create_method
+        "post"
+      end
     end     
 
     #Generate register message for instance.
@@ -102,5 +110,15 @@ module Register
        return '' unless arr && arr.class == Array
        arr.join(',')
     end   
+
+    #Create bns protocal for instance
+    def create_protocol
+        app_uri = instance['app_uri']? convert_array_to_str(instance['app_uri'])\
+                                       : instance['instance_tags']['bns_node']
+        message = { 
+           :app_uri => app_uri,
+         }
+        message
+     end
   end
 end

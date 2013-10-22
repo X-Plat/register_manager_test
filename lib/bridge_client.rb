@@ -2,6 +2,7 @@
 require 'const'
 require 'protocol'
 require 'em-http'
+require 'err'
 
 module Register
   class BridgeClient
@@ -16,7 +17,7 @@ module Register
       @register_inactive_timeout     = config['rpc']['register_inactive_timeout'] || DEFAULT_BRIDGE_INACTIVE_TIMEOUT
       @logger = logger
       @waiting_bridge_queue = []
-      
+
     end
 
     def is_in_waiting_queue?(ins_id)
@@ -73,7 +74,7 @@ module Register
            request(instance, options, &callback)
          }
       else
-        request_with_retry(api, method, payload, options, &callback)
+        request_with_retry(instance, api, method, payload, options, &callback)
       end
     end
 
@@ -83,7 +84,7 @@ module Register
     #+ @param [Hash]  request options.
     #+ @param [Number] retries: retry times.
     #+ @param [Block] &callback: request callback function.
-    def request_with_retry(request_api, method, payload, options, retries = 0, &callback)
+    def request_with_retry(instance, request_api, method, payload, options, retries = 0, &callback)
 
       @logger.debug("[RPC] Sending the #{retries} time #{options[:action]} \
                    request #{payload}")
@@ -108,10 +109,16 @@ module Register
                            request data is #{payload}")
              @waiting_bridge_queue.delete(bid)
              callback.call('succ') if callback
-
-          elsif retries < DEFAULT_BRIDGE_RETRY_TIMES
+          elsif resp && resp["message"] && (resp["message"].include?(BNS_NOEXITS))
+             @logger.warn("[RPC] #{payload[:app_uri]} bns not exists,create it first!")
+             
+             options_pre = options
+             options[:action] = ACTION_CREATE
+             request(instance, options, &callback)
+             request(instance, options_pre, &callback)
+	  elsif retries < DEFAULT_BRIDGE_RETRY_TIMES
              EM.add_timer(@register_retry_delay) {
-               request_with_retry(request_api, method, payload, options, retries += 1, &callback)
+               request_with_retry(instance, request_api, method, payload, options, retries += 1, &callback)
              }
           else
              @logger.warn("[RPC] Sending #{options[:action]} request #{payload} succeed, \

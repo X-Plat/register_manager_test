@@ -2,6 +2,7 @@
 require "nats/client"
 require "bridge_client"
 require 'vcap/logging'
+require 'const'
 
 module Register
   class Broker
@@ -44,11 +45,11 @@ module Register
       NATS.start(:uri => @nats_uri) do
 	NATS.subscribe('broker.register', :queue => :bk) { |msg| 
           instance = Yajl::Parser.parse(msg)
-          bridge_client.request( instance, { :action => 'register'} )
+          bridge_client.request( instance, { :action => ACTION_REGISTER} )
         }
         NATS.subscribe('broker.unregister',:queue => :bk) { |msg| 
           instance = Yajl::Parser.parse(msg)
-          bridge_client.request( instance, { :action => 'unregister'} )
+          bridge_client.request( instance, { :action => ACTION_UNREGISTER} )
         }
       end
     end
