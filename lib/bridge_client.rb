@@ -110,10 +110,10 @@ module Register
              @waiting_bridge_queue.delete(bid)
              callback.call('succ') if callback
           elsif resp && resp["message"] && (resp["message"].include?(BNS_NOEXITS))
-	     @logger.warn("[RPC] #{payload[:app_uri]} bns not exists,create it first!")
+             @logger.warn("[RPC] #{payload[:app_uri]} bns not exists,create it first!")
              
- 	     options_pre = options
-	     options[:action] = ACTION_CREATE
+             options_pre = options
+             options[:action] = ACTION_CREATE
              request(instance, options, &callback)
              request(instance, options_pre, &callback)
 	  elsif retries < DEFAULT_BRIDGE_RETRY_TIMES
