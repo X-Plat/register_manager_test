@@ -54,6 +54,7 @@ module Register
           :instance_http_port => instance_http_port,
           :instance_rmi_ports => convert_hash_to_str(prod_ports),
           :instance_path => instance['instance_path'] || DEFAULT_APP_PATH,
+          :instance_cluster=> instance['cluster'],
         }
        message
     end
@@ -89,8 +90,10 @@ module Register
     def unregister_protocol
       {
 	:app_id => instance['app_id'],
+        :app_uri => instance['app_uri'],
 	:app_name => instance['app_name'],
-	:instance_index => instance['instance_index']
+	:instance_index => instance['instance_index'],
+        :instance_cluster=> instance['cluster'],
       }
     end
 
