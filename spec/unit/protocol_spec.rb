@@ -44,7 +44,6 @@ module Register
         :instance_http_port => 10041,
         :instance_rmi_ports => "{\"server\":10041}",
         :instance_path=>"N/A",
-        :instance_cluster=>"app_cluster",
       }
     end
 
@@ -69,7 +68,6 @@ module Register
          :app_uri => "test.baidu.com",
          :app_name => "test",
          :instance_index => "0",
-         :instance_cluster => "app_cluster",
        }
     end
 
