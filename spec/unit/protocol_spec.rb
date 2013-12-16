@@ -43,7 +43,8 @@ module Register
         :instance_ip => "127.0.0.1",
         :instance_http_port => 10041,
         :instance_rmi_ports => "{\"server\":10041}",
-        :instance_path=>"N/A"
+        :instance_path=>"N/A",
+        :instance_cluster=>"app_cluster",
       }
     end
 
@@ -65,8 +66,10 @@ module Register
     it "should return the standard unregister protocol" do
        @protocol.unregister_protocol.should == {
          :app_id => "1",
+         :app_uri => "test.baidu.com",
          :app_name => "test",
-         :instance_index => "0"
+         :instance_index => "0",
+         :instance_cluster => "app_cluster",
        }
     end
 

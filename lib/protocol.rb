@@ -90,10 +90,10 @@ module Register
     def unregister_protocol
       {
 	:app_id => instance['app_id'],
-        :app_uri => instance['app_uri'],
+	:app_uri => instance['app_uri'],
 	:app_name => instance['app_name'],
 	:instance_index => instance['instance_index'],
-        :instance_cluster=> instance['cluster'],
+	:instance_cluster=> instance['cluster'],
       }
     end
 
