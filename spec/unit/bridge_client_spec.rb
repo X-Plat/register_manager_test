@@ -27,7 +27,8 @@ module Register
 	  'bridge_domain' => 'testjpaas.baidu.com',
 	  'register_retry_delay' => 2,
 	  'register_conn_timeout' => 3 ,      
-	  'register_inactive_timeout' => 2 
+	  'register_inactive_timeout' => 2, 
+        'cluster' => 'app_cluster',
         }
       }
       config.update(overide)
