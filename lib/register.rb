@@ -13,6 +13,7 @@ module Register
       VCAP::Logging.setup_from_config(@config['logging'])
       @logger = VCAP::Logging.logger('broker') 
       @nats_uri = @config['mbus']
+      @instance_cluster = @config['cluster']
       ['TERM', 'INT', 'QUIT'].each { |s| 
         trap(s) { 
           shutdown() 
@@ -45,10 +46,12 @@ module Register
       NATS.start(:uri => @nats_uri) do
 	NATS.subscribe('broker.register', :queue => :bk) { |msg| 
           instance = Yajl::Parser.parse(msg)
+          instance['cluster']=@instance_cluster
           bridge_client.request( instance, { :action => ACTION_REGISTER} )
         }
         NATS.subscribe('broker.unregister',:queue => :bk) { |msg| 
           instance = Yajl::Parser.parse(msg)
+          instance['cluster']=@instance_cluster
           bridge_client.request( instance, { :action => ACTION_UNREGISTER} )
         }
       end
