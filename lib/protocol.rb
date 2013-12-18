@@ -54,7 +54,7 @@ module Register
           :instance_http_port => instance_http_port,
           :instance_rmi_ports => convert_hash_to_str(prod_ports),
           :instance_path => instance['instance_path'] || DEFAULT_APP_PATH,
-          :instance_cluster=> instance['cluster'],
+          :instance_cluster=> instance['cluster'] || DEFAULT_APP_CLUSTER,
         }
        message
     end
@@ -95,7 +95,7 @@ module Register
         :app_uri => app_uri,
         :app_name => instance['app_name'],
         :instance_index => instance['instance_index'],
-        :instance_cluster=> instance['cluster'],
+        :instance_cluster=> instance['cluster'] || DEFAULT_APP_CLUSTER,
       }
       message
     end
