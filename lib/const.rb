@@ -7,6 +7,7 @@ module Register
     DEFAULT_BRIDGE_INACTIVE_TIMEOUT = 2
     DEFAULT_APP_USER = 'app@baidu.com'
     DEFAULT_APP_PATH = 'N/A'
+    DEFAULT_APP_CLUSTER = 'app_cluster'
     ACTION_REGISTER = 'register'.freeze
     ACTION_UNREGISTER = 'unregister'.freeze
     ACTION_CREATE = 'create'.freeze
