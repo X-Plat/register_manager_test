@@ -22,6 +22,14 @@ module Register
       def unregister_api
         "/delRMIports"
       end
+
+      def create_api
+        "/addServiceName"
+      end
+ 
+      def create_method
+        "post"
+      end
     end     
 
     #Generate register message for instance.
@@ -46,6 +54,7 @@ module Register
           :instance_http_port => instance_http_port,
           :instance_rmi_ports => convert_hash_to_str(prod_ports),
           :instance_path => instance['instance_path'] || DEFAULT_APP_PATH,
+          :instance_cluster=> instance['cluster'] || DEFAULT_APP_CLUSTER,
         }
        message
     end
@@ -79,11 +88,16 @@ module Register
 
     #Unregister instance protocol
     def unregister_protocol
-      {
-	:app_id => instance['app_id'],
-	:app_name => instance['app_name'],
-	:instance_index => instance['instance_index']
+      app_uri = instance['app_uri']? convert_array_to_str(instance['app_uri'])\
+                                       : instance['instance_tags']['bns_node']
+      message = {
+        :app_id => instance['app_id'],
+        :app_uri => app_uri,
+        :app_name => instance['app_name'],
+        :instance_index => instance['instance_index'],
+        :instance_cluster=> instance['cluster'] || DEFAULT_APP_CLUSTER,
       }
+      message
     end
 
     #Convert hash to string, just to satisfy the bridge interface.
@@ -102,5 +116,15 @@ module Register
        return '' unless arr && arr.class == Array
        arr.join(',')
     end   
+
+    #Create bns protocal for instance
+    def create_protocol
+        app_uri = instance['app_uri']? convert_array_to_str(instance['app_uri'])\
+                                       : instance['instance_tags']['bns_node']
+        message = { 
+           :app_uri => app_uri,
+         }
+        message
+     end
   end
 end
