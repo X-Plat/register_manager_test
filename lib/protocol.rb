@@ -124,7 +124,8 @@ module Register
                                        : instance['instance_tags']['bns_node']
         instance_cluster = instance['cluster'] || DEFAULT_APP_CLUSTER
         message = { 
-           :app_uri => app_uri<<".jpaas."<<instance_cluster,
+           :app_uri => app_uri+'.jpaas.'+instance_cluster,
+
          }
         message
      end
