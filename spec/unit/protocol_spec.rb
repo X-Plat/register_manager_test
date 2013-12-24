@@ -44,7 +44,7 @@ module Register
         :instance_http_port => 10041,
         :instance_rmi_ports => "{\"server\":10041}",
         :instance_path=>"N/A",
-        :instance_cluster=>nil,
+        :instance_cluster=>"app_cluster",
       }
     end
 
@@ -67,9 +67,8 @@ module Register
        @protocol.unregister_protocol.should == {
          :app_id => "1",
          :app_uri => "test.baidu.com",
-         :app_name => "test",
          :instance_index => "0",
-         :instance_cluster=>nil,
+         :instance_cluster=>"app_cluster",
        }
     end
 
