@@ -93,7 +93,7 @@ module Register
                                        : instance['instance_tags']['bns_node']   
       instance_cluster = instance['cluster'] || DEFAULT_APP_CLUSTER
       message = {
-	:app_id => instance['app_id'],
+        :app_name => instance['app_name'],
         :app_uri => app_uri,
 	:instance_index => instance['instance_index'],
         :instance_cluster=> instance_cluster,
