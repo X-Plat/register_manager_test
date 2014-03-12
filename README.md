@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/X-Plat/register_manager.png)](https://travis-ci.org/X-Plat/register_manager)
+
 # register_manager
 
 This repository contains the source code for a register manager

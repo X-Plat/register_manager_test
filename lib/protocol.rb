@@ -6,7 +6,7 @@ module Register
       @instance = instance
     end
 
-    class <<self
+    class << self
       def register_api
         "/addRMIports"
       end
@@ -22,6 +22,14 @@ module Register
       def unregister_api
         "/delRMIports"
       end
+
+      def create_api
+        "/addServiceName"
+      end
+ 
+      def create_method
+        "post"
+      end
     end     
 
     #Generate register message for instance.
@@ -33,6 +41,7 @@ module Register
                                  : prod_ports.values_at(prod_ports.keys[0])[0]
        app_uri = instance['app_uri']? convert_array_to_str(instance['app_uri'])\
                                        : instance['instance_tags']['bns_node']
+       instance_cluster = instance['cluster'] || DEFAULT_APP_CLUSTER
        message = {
           :app_uri => app_uri,
           :app_id => instance['app_id'],
@@ -46,6 +55,7 @@ module Register
           :instance_http_port => instance_http_port,
           :instance_rmi_ports => convert_hash_to_str(prod_ports),
           :instance_path => instance['instance_path'] || DEFAULT_APP_PATH,
+          :instance_cluster=> instance_cluster,
         }
        message
     end
@@ -79,11 +89,16 @@ module Register
 
     #Unregister instance protocol
     def unregister_protocol
-      {
+      app_uri = instance['app_uri']? convert_array_to_str(instance['app_uri'])\
+                                       : instance['instance_tags']['bns_node']   
+      instance_cluster = instance['cluster'] || DEFAULT_APP_CLUSTER
+      message = {
 	:app_id => instance['app_id'],
-	:app_name => instance['app_name'],
-	:instance_index => instance['instance_index']
+        :app_uri => app_uri,
+	:instance_index => instance['instance_index'],
+        :instance_cluster=> instance_cluster,
       }
+      message
     end
 
     #Convert hash to string, just to satisfy the bridge interface.
@@ -102,5 +117,16 @@ module Register
        return '' unless arr && arr.class == Array
        arr.join(',')
     end   
+
+    #Create bns protocal for instance
+    def create_protocol
+        app_uri = instance['app_uri']? convert_array_to_str(instance['app_uri'])\
+                                       : instance['instance_tags']['bns_node']
+        instance_cluster = instance['cluster'] || DEFAULT_APP_CLUSTER
+        message = { 
+           :app_uri => app_uri+'.jpaas.'+instance_cluster
+         }
+        message
+     end
   end
 end

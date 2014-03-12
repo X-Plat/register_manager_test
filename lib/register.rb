@@ -2,6 +2,7 @@
 require "nats/client"
 require "bridge_client"
 require 'vcap/logging'
+require 'const'
 
 module Register
   class Broker
@@ -12,6 +13,7 @@ module Register
       VCAP::Logging.setup_from_config(@config['logging'])
       @logger = VCAP::Logging.logger('broker') 
       @nats_uri = @config['mbus']
+      @instance_cluster = @config['cluster']
       ['TERM', 'INT', 'QUIT'].each { |s| 
         trap(s) { 
           shutdown() 
@@ -45,12 +47,14 @@ module Register
 	NATS.subscribe('broker.register', :queue => :bk) { |msg| 
           logger.info("[RPC] Received broker.register message.")
           instance = Yajl::Parser.parse(msg)
-          bridge_client.request( instance, { :action => 'register'} )
+          instance['cluster']=@instance_cluster
+          bridge_client.request( instance, { :action => ACTION_REGISTER} )
         }
         NATS.subscribe('broker.unregister',:queue => :bk) { |msg| 
           logger.info("[RPC] Received broker.unregister message.")
           instance = Yajl::Parser.parse(msg)
-          bridge_client.request( instance, { :action => 'unregister'} )
+          instance['cluster']=@instance_cluster
+          bridge_client.request( instance, { :action => ACTION_UNREGISTER} )
         }
       end
     end

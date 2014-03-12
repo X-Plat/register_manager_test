@@ -11,3 +11,5 @@ rpc:
   register_retry_delay: 2         #delay to register instance again.
   register_conn_timeout: 3        #connection timeout with bridge.
   register_inactive_timeout: 2    #connection inactive timeout with bridge.
+
+cluster: app_cluster

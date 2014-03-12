@@ -13,7 +13,7 @@ require 'bundler/setup'
 require "register"
 
 unless ARGV.size == 1
-  abort "Usage: dea <config path>"
+  abort "Usage: register <config path>"
 end
 
 begin
