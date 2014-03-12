@@ -6,7 +6,7 @@ module Register
       @instance = instance
     end
 
-    class <<self
+    class << self
       def register_api
         "/addRMIports"
       end
@@ -41,6 +41,7 @@ module Register
                                  : prod_ports.values_at(prod_ports.keys[0])[0]
        app_uri = instance['app_uri']? convert_array_to_str(instance['app_uri'])\
                                        : instance['instance_tags']['bns_node']
+       instance_cluster = instance['cluster'] || DEFAULT_APP_CLUSTER
        message = {
           :app_uri => app_uri,
           :app_id => instance['app_id'],
@@ -54,7 +55,7 @@ module Register
           :instance_http_port => instance_http_port,
           :instance_rmi_ports => convert_hash_to_str(prod_ports),
           :instance_path => instance['instance_path'] || DEFAULT_APP_PATH,
-          :instance_cluster=> instance['cluster'] || DEFAULT_APP_CLUSTER,
+          :instance_cluster=> instance_cluster,
         }
        message
     end
@@ -89,13 +90,13 @@ module Register
     #Unregister instance protocol
     def unregister_protocol
       app_uri = instance['app_uri']? convert_array_to_str(instance['app_uri'])\
-                                       : instance['instance_tags']['bns_node']
+                                       : instance['instance_tags']['bns_node']   
+      instance_cluster = instance['cluster'] || DEFAULT_APP_CLUSTER
       message = {
-        :app_id => instance['app_id'],
+	:app_id => instance['app_id'],
         :app_uri => app_uri,
-        :app_name => instance['app_name'],
-        :instance_index => instance['instance_index'],
-        :instance_cluster=> instance['cluster'] || DEFAULT_APP_CLUSTER,
+	:instance_index => instance['instance_index'],
+        :instance_cluster=> instance_cluster,
       }
       message
     end
@@ -121,8 +122,9 @@ module Register
     def create_protocol
         app_uri = instance['app_uri']? convert_array_to_str(instance['app_uri'])\
                                        : instance['instance_tags']['bns_node']
+        instance_cluster = instance['cluster'] || DEFAULT_APP_CLUSTER
         message = { 
-           :app_uri => app_uri,
+           :app_uri => app_uri+'.jpaas.'+instance_cluster
          }
         message
      end
