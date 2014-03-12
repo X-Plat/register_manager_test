@@ -11,7 +11,6 @@ module Register
 
     def initialize(config, logger)
       @bridge = config['rpc']['bridge']
-      @bridge_domain = config['rpc']['bridge_domain']
       @register_retry_delay          = config['rpc']['register_retry_delay'] || DEFAULT_BRIDGE_RETRY_DELAY
       @register_conn_timeout         = config['rpc']['register_conn_timeout'] || DEFAULT_BRIDGE_CONN_TIMEOUT
       @register_inactive_timeout     = config['rpc']['register_inactive_timeout'] || DEFAULT_BRIDGE_INACTIVE_TIMEOUT
@@ -137,7 +136,7 @@ module Register
       http.errback {
         if retries < DEFAULT_BRIDGE_RETRY_TIMES
            EM.add_timer(@register_retry_delay) {
-             request(request_api, method, payload, options, retries += 1, &callback)
+             request_with_retry(request_api, method, payload, options, retries += 1, &callback)
            }
         else
            @logger.warn("[RPC] Register instance with bridge failed with error\
