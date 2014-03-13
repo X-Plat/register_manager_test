@@ -67,7 +67,6 @@ module Register
        @protocol.unregister_protocol.should == {
          :app_id => "1",
          :app_uri => "test.baidu.com",
-         :app_name => "test",
          :instance_index => "0",
          :instance_cluster=> "app_cluster",
        }
