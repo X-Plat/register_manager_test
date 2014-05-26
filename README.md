@@ -16,7 +16,7 @@ aming service, especially for the rpc suitations.
 The following instructions may help you get started with register
 manager in a standalone environment.
 
-### Setup
+### Setup 
 
 ```
 git clone https://github.com/X-Plat/register_manager
